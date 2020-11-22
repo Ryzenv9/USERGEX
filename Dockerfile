@@ -1,5 +1,5 @@
 # set base image (host OS)
-FROM python:3.8
+FROM python:3.8-slim-buster
 
 # set the working directory in the container
 WORKDIR /app/
@@ -39,8 +39,12 @@ ENV GOOGLE_CHROME_BIN /usr/bin/google-chrome-stable
 # copy the dependencies file to the working directory
 COPY requirements.txt .
 
+# From https://github.com/AvinashReddy3108/PaperplaneRemix/blob/master/Dockerfile
 # install dependencies
-RUN pip install -r requirements.txt
+RUN python3 -m pip install --no-warn-script-location --no-cache-dir --upgrade -r requirements.txt
+
+# Cleanup
+RUN rm -rf /var/lib/apt/lists /var/cache/apt/archives /tmp
 
 # copy the content of the local src directory to the working directory
 COPY . .
